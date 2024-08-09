@@ -16,4 +16,3 @@ public record NewsDto(Long id, String icon, String description) {
         return model;
     }
 }
-

@@ -1,7 +1,6 @@
 package me.dio.controller.dto;
 
 import me.dio.domain.model.Card;
-
 import java.math.BigDecimal;
 
 public record CardDto(Long id, String number, BigDecimal limit) {

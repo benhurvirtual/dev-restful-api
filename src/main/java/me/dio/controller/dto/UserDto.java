@@ -1,12 +1,10 @@
 package me.dio.controller.dto;
 
 import me.dio.domain.model.User;
-
+import java.util.ArrayList;
 import java.util.List;
-
-import static java.util.Collections.emptyList;
-import static java.util.Optional.ofNullable;
-import static java.util.stream.Collectors.toList;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public record UserDto(
         Long id,
@@ -20,10 +18,10 @@ public record UserDto(
         this(
                 model.getId(),
                 model.getName(),
-                ofNullable(model.getAccount()).map(AccountDto::new).orElse(null),
-                ofNullable(model.getCard()).map(CardDto::new).orElse(null),
-                ofNullable(model.getFeatures()).orElse(emptyList()).stream().map(FeatureDto::new).collect(toList()),
-                ofNullable(model.getNews()).orElse(emptyList()).stream().map(NewsDto::new).collect(toList())
+                Optional.ofNullable(model.getAccount()).map(AccountDto::new).orElse(null),
+                Optional.ofNullable(model.getCard()).map(CardDto::new).orElse(null),
+                model.getFeatures().stream().map(FeatureDto::new).collect(Collectors.toList()),
+                model.getNews().stream().map(NewsDto::new).collect(Collectors.toList())
         );
     }
 
@@ -31,12 +29,10 @@ public record UserDto(
         User model = new User();
         model.setId(this.id);
         model.setName(this.name);
-        model.setAccount(ofNullable(this.account).map(AccountDto::toModel).orElse(null));
-        model.setCard(ofNullable(this.card).map(CardDto::toModel).orElse(null));
-        model.setFeatures(ofNullable(this.features).orElse(emptyList()).stream().map(FeatureDto::toModel).collect(toList()));
-        model.setNews(ofNullable(this.news).orElse(emptyList()).stream().map(NewsDto::toModel).collect(toList()));
+        model.setAccount(Optional.ofNullable(this.account).map(AccountDto::toModel).orElse(null));
+        model.setCard(Optional.ofNullable(this.card).map(CardDto::toModel).orElse(null));
+        model.setFeatures(this.features != null ? this.features.stream().map(FeatureDto::toModel).collect(Collectors.toList()) : new ArrayList<>());
+        model.setNews(this.news != null ? this.news.stream().map(NewsDto::toModel).collect(Collectors.toList()) : new ArrayList<>());
         return model;
     }
-
 }
-
